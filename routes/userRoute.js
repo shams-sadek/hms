@@ -38,27 +38,17 @@ router.get('/', (req, res, next) => {
                 resolve( JSON.parse(body) );
         });
 
+
     })
 
     var p2 = ['shams', 'sadek', 'faiza'];
 
-    var p3 = [
-        {
-            name: 'Shams Sadek'
-        },
-        {
-            name: 'Nazmun Nahar'
-        },
-        {
-            name: 'Shahida Chowdhury'
-        }
 
-    ];
 
     // send by promise all
-    Promise.all([p1, p2, p3]).then( values => {
+    Promise.all([p1, p2]).then( values => {
 
-               res.render('user/user_list', {
+               res.render('user/userList', {
                    userLists: values[0],
                    names: values[1],
                    users: values[2]
@@ -71,23 +61,70 @@ router.get('/', (req, res, next) => {
 })
 
 
-// get
+/**
+ | -----------------------------------------------------------------------------
+ | get => /users/create
+ | -----------------------------------------------------------------------------
+ */
 router.get('/create', (req, res, next) => {
-        res.render('user/userRegistration');
-});
 
+        res.render('user/userRegistration', { errors: req.session.errors});
 
-// post
-router.post('/create', (req, res, next) => {
-        res.send(req);
+        req.session.errors = null;
 });
 
 
 /**
  | -----------------------------------------------------------------------------
- | route = /user/
+ | post => /users/create
  | -----------------------------------------------------------------------------
- | post
+ */
+router.post('/create', (req, res, next) => {
+
+    // check validation
+    req.check('name', 'Name field is required.').notEmpty();
+    req.check('email', 'Email field is required.').notEmpty();
+
+    var errors = req.validationErrors();
+    if(errors){
+         req.session.errors = {msg: errors[0].msg};
+         res.redirect('/users/create');
+    }
+
+
+    var url = globalUrl + '/api/users';
+
+    // promise-1
+    var p1 = new Promise( (resolve, reject) => {
+        request.post({url: url, form: req.body }, (err,httpResponse,body) => {
+
+                     if (err) reject(err);
+
+                     else resolve(body);
+
+                });
+    });// p1
+
+
+    // apply promises
+    Promise.all([p1]).then( values => {
+
+        res.send(values[0]);
+
+    }).catch( reason => {
+        res.send('hi');
+        // res.send(reason);
+    })
+
+
+    res.redirect('/users');
+});
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | post => /user/
+ | -----------------------------------------------------------------------------
  */
 router.post('/', function (req, res, next) {
 
@@ -103,9 +140,8 @@ router.post('/', function (req, res, next) {
 
 /**
  | -----------------------------------------------------------------------------
- | route = /api/user/:id
+ | delete => /api/user/:id
  | -----------------------------------------------------------------------------
- | delete
  */
 router.delete('/:id', function (req, res, next) {
 

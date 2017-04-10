@@ -2,7 +2,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var webpack = require('webpack');
+let webpack = require('webpack');
 
 const path = require('path');
 
@@ -34,11 +34,13 @@ var cssConfig = isProd ? cssProd : cssDev;
  */
 module.exports = {
         entry: {
-            app: [
-                path.resolve(__dirname, "src/app.js"),
-                path.resolve(__dirname, "src/other.js")
+            contact: [
+                path.resolve(__dirname, "src/contact.js")
             ],
-            contact: path.resolve(__dirname, "src/contact.js"),
+            app: [
+                path.resolve(__dirname, "src/other.js"),
+                path.resolve(__dirname, "src/app.js"),
+            ],
         },
         output: {
             path: path.resolve(__dirname, "dist"),
@@ -103,6 +105,6 @@ module.exports = {
 
               new webpack.HotModuleReplacementPlugin(),
 
-              new webpack.NamedModulesPlugin(),
+              new webpack.NamedModulesPlugin()
         ]// plugins
 }

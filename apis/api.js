@@ -5,7 +5,6 @@
  */
 module.exports = function(app){
 
-
     // users
     app.use('/api/users', require('./userApi'));
 

@@ -21,7 +21,6 @@ var request = require("request")
  */
 router.get('/', function (req, res) {
 
-
     var p1 = new Promise(function(resolve, reject){
 
         var url = globalUrl + '/api/user/list';
@@ -35,7 +34,13 @@ router.get('/', function (req, res) {
 
     var p2 = ['shams', 'sadek'];
 
-    Promise.all([p1, p2]).then(function(values){
+    var p3 = [
+        { Name: 'Hello World', Age: '18' },
+        { Age: 23,  Name: 'Habib' },
+        { Age: 28, 'Position': 'Programmer' }
+        ];
+
+    Promise.all([p1, p2, p3]).then(function(values){
 
                res.render('home', { p1: values[0], p2: values[1] });
 

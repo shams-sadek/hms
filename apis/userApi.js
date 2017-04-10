@@ -54,6 +54,8 @@ router.get('/', function (req, res, next) {
  */
 router.post('/', function (req, res, next) {
 
+
+    // store data
     User.create(req.body).then(function(user){
 
             res.send(user);

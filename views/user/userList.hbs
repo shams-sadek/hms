@@ -1,0 +1,17 @@
+<h1>User Lists....</h1>
+
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+    </tr>
+
+    {{#each userLists as |value key|}}
+
+        <tr>
+            <td>{{ value.name }}</td>
+        </tr>
+
+    {{/each}}
+
+</table>

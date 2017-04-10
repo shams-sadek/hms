@@ -11,7 +11,7 @@ module.exports = function(app){
 
 
     // example of birds route
-    app.use('/birds', require('./birds'));
+    // app.use('/birds', require('./birds'));
 
 
     // user

@@ -2,15 +2,40 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title></title>
+        <title>Master Page</title>
+
+
     </head>
+
+
     <body>
-        <p>Content goes here... And Other things</p>
-        <p>Testing Project......</p>
 
-        <div id="root"></div>
+        <!--
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         | All Styles Files are added
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        -->
+        {{> styles }}
 
-        {{{ body }}}
-        <img src=src/images/html5.png >
-    <script type="text/javascript" src="../../dist/app.bundle.js?d7001c93bc693e93937a"></script></body>
+        {{> navbar }}
+
+        <div class="body">
+            {{{ body }}}
+        </div>
+
+
+        <footer>{{> footer }}</footer>
+
+    </body>
+
+
+
+
+    <!--
+     | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Add Script File from partials directory
+     | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+        {{> scripts }}
+
 </html>

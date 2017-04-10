@@ -5,12 +5,12 @@ var Schema = mongoose.Schema({
         type: String,
         required: [true, 'Name field is required']
     },
-    email: {
-        type: String,
-        unique: true,
-        required: [true, 'email field is required']
-    },
-    // email: { type: String },
+    // email: {
+    //     type: String,
+    //     unique: true,
+    //     required: [true, 'email field is required']
+    // },
+    email: { type: String },
     password: { type: String},
     available: {
         type: Boolean,

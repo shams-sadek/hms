@@ -29,32 +29,45 @@ class Calculation extends React.Component {
 
     render(){
         return (
-            <div>
-                <div>
-                    Total:<input type="text" disabled ref="total" defaultValue={this.state.total}/>
-                </div>
+            <div className="container">
+            <div className="row">
+            <div className="col-xs-4">
+                <form>
 
-                <div>
-                    Vat:<input type="text" disabled ref="vat" defaultValue={this.state.vat}/>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="total">Total</label>
+                    <input type="text" className="form-control" disabled ref="total" defaultValue={this.state.total} placeholder="Total"/>
+                  </div>
 
-                <div>
-                    Discount:<input type="text" id="discount" ref="discount" defaultValue={this.state.discount} onKeyUp={ (e) => this.handleDiscount(e)}/>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="vat">Vat</label>
+                    <input type="text" className="form-control" disabled ref="vat" defaultValue={this.state.vat} placeholder="Vat"/>
+                  </div>
 
-                <div>
-                    Grand Total:<input type="text" disabled id="grandTotal" ref="grandTotal" defaultValue={this.state.grandTotal}/>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="discount">Discount</label>
+                    <input type="text" className="form-control"  ref="discount" id="discount" defaultValue={this.state.discount} onKeyUp={ (e) => this.handleDiscount(e)} placeholder="Discount"/>
+                  </div>
 
-                <div>
-                    Cash:<input type="text" id="cash" ref="cash" defaultValue={this.state.cash} onKeyUp={ this.handleCash }/>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="grandTotal">Grand Total</label>
+                    <input type="text" className="form-control"  disabled id="grandTotal" ref="grandTotal" defaultValue={this.state.grandTotal} placeholder="Grand Total"/>
+                  </div>
 
-                <div ref="testDiv">
-                    Dues:<input type="text" disabled id="dues" ref="dues" defaultValue={this.state.dues}/>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="cash">Cash</label>
+                    <input type="text" className="form-control" id="cash" ref="cash" defaultValue={this.state.cash} onKeyUp={ this.handleCash } placeholder="Cash"/>
+                  </div>
 
+                  <div className="form-group">
+                    <label htmlFor="dues">Dues</label>
+                    <input type="text" className="form-control" disabled id="dues" ref="dues" defaultValue={this.state.dues} placeholder="Dues"/>
+                  </div>
 
+                </form>
+
+            </div>
+            </div>
             </div>
         )
     }//render

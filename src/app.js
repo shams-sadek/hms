@@ -3,8 +3,8 @@
 //  | create css styles.css in dist folder
 //  | -----------------------------------------------------------------------------
 //  */
-// require('./app.scss');
-// require('./css/index.scss');
+require('./app.scss');
+require('./css/index.scss');
 //
 //
 // import React from 'react';

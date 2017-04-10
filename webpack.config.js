@@ -6,7 +6,7 @@ let webpack = require('webpack');
 
 const path = require('path');
 
-
+var bootstrapEntryPoints = require('./webpack.bootstrap.config');
 /**
  | -----------------------------------------------------------------------------
  | css processing
@@ -23,6 +23,8 @@ var cssProd = ExtractTextPlugin.extract({
               });
 
 var cssConfig = isProd ? cssProd : cssDev;
+
+var bootstrapConfig = isProd ? bootstrapEntryPoints.prod : bootstrapEntryPoints.dev;
 
 
 
@@ -41,6 +43,7 @@ module.exports = {
                 path.resolve(__dirname, "src/other.js"),
                 path.resolve(__dirname, "src/app.js"),
             ],
+            bootstrap: bootstrapConfig
         },
         output: {
             path: path.resolve(__dirname, "dist"),
@@ -64,7 +67,10 @@ module.exports = {
                         'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                     ],
 
-                }
+                },
+                { test: /\.(woff2?|svg)$/, loader: 'url-loader?limit=10000&name=fonts/[name].[ext]' },
+                { test: /\.(ttf|eot)$/, loader: 'file-loader?name=fonts/[name].[ext]' },
+                { test:/bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/, loader: 'imports-loader?jQuery=jquery' },
             ]
         },
         devServer: {
@@ -72,7 +78,7 @@ module.exports = {
           compress: true,
           port: 8081,
           stats: 'errors-only',
-          hot: true
+          hot: true,
         },
         plugins: [
                 new HtmlWebpackPlugin({
@@ -98,7 +104,7 @@ module.exports = {
               }),
 
               new ExtractTextPlugin({
-                  filename: "styles.css",
+                  filename: "/css/[name].css",
                   disable: !isProd,
                   allChunks: true
               }),

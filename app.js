@@ -10,6 +10,16 @@ const expressValidator = require('express-validator');
 const expressSession = require('express-session');
 
 
+/**
+ | ------------------------------
+ | Allow Access Control
+ | ------------------------------
+ */
+var cors = require('cors');
+app.use(cors());
+
+
+
 
 /**
  | -----------------------------------------------------------------------------

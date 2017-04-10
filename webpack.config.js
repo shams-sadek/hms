@@ -79,6 +79,18 @@ module.exports = {
           port: 8081,
           stats: 'errors-only',
           hot: true,
+          proxy: {
+              '/api': {
+                 target: {
+                    host: "localhost",
+                    protocol: 'http:',
+                    port: 3000
+                 },
+                 pathRewrite: {
+                    '^/api': ''
+                 }
+              }
+           }
         },
         plugins: [
                 new HtmlWebpackPlugin({

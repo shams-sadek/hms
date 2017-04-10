@@ -19,6 +19,7 @@
     "babel-preset-react": "^6.23.0",
     "bootstrap-loader": "^2.0.0",
     "bootstrap-sass": "^3.3.7",
+    "cors": "^2.8.3",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.0",
@@ -34,6 +35,7 @@
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
+    "superagent": "^3.5.2",
     "url-loader": "^0.5.8",
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.2"
@@ -52,7 +54,9 @@
     "mongoose": "^4.9.2",
     "mongorito": "^2.2.0",
     "nodemon": "^1.11.0",
+    "react-bootstrap-table": "^3.1.7",
     "request": "^2.81.0",
+    "request-promise": "^4.2.0",
     "socket.io": "^1.7.3"
   }
 }

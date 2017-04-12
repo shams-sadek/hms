@@ -9,7 +9,6 @@ const app = express();
 const expressValidator = require('express-validator');
 const expressSession = require('express-session');
 
-
 /**
  | ------------------------------
  | Allow Access Control
@@ -127,7 +126,6 @@ app.set('view engine', 'hbs');
 
 app.use('/assets', express.static('assets'));
 app.use('/dist', express.static('dist'));
-
 
 
 

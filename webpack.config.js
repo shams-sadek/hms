@@ -43,6 +43,9 @@ module.exports = {
                 path.resolve(__dirname, "src/other.js"),
                 path.resolve(__dirname, "src/app.js"),
             ],
+            calculation: [
+                path.resolve(__dirname, "src/calculation/calculation.js"),
+            ],
             bootstrap: bootstrapConfig
         },
         output: {

@@ -37,10 +37,11 @@ router.get('/', function (req, res, next) {
     //     else res.json(data);
     // })
 
-    User.find({}).then(function(user){
-        res.send(user);
-    });
-
+    User.find({})
+        .select(['name'])
+        .then( (user) => {
+            res.send(user);
+        });
 })
 
 

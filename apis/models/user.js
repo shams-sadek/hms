@@ -19,5 +19,11 @@ var Schema = mongoose.Schema({
 });
 
 
+
+Schema.virtual('fullName').get(function () {
+  return this._id + ' ' + this.name;
+});
+
+
 //exports user collection
 module.exports = mongoose.model('user', Schema);

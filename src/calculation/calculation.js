@@ -1,9 +1,9 @@
 require('./calculation.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-class Calculation extends React.Component {
+class Calculation extends Component {
 
     constructor(props){
         super(props)

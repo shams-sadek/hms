@@ -84,7 +84,7 @@ global.globalUrl = 'http://localhost:3000';
 
 /**
  | -----------------------------------------------------------------------------
- | calling all APIs
+ | calling all APIs (2nd Part middleware)
  | -----------------------------------------------------------------------------
  */
  var api = require('./apis/api');
@@ -95,17 +95,19 @@ global.globalUrl = 'http://localhost:3000';
 
  /**
   | ----------------------------------------------------------------------------
-  | error handling middleware V.V.I
+  | error handling middleware V.V.I ( 3rd/Last Part middleware)
   | ----------------------------------------------------------------------------
   */
- // app.use(function(err, req, res, next){
- //    // console.log(err);
- //
- //    var formField = err[Object.keys(err)[0]];
- //    var errResult = formField[Object.keys(formField)[0]];
- //
- //    res.status(422).send({ error: errResult.message });
- // });
+ app.use(function(err, req, res, next){
+    // console.log(err);
+
+    // var formField = err[Object.keys(err)[0]];
+    // var errResult = formField[Object.keys(formField)[0]];
+    // res.status(422).send({ error: errResult.message });
+
+    // 422: Unprocessable Entity
+    res.status(422).send({ error: err });
+ });
 
 
 

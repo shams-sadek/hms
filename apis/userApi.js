@@ -6,7 +6,6 @@
 var express = require('express');
 var router = express.Router();
 
-
 /**
  | -----------------------------------------------------------------------------
  | user model
@@ -25,7 +24,7 @@ router.use(function timeLog (req, res, next) {
 
 /**
  | -----------------------------------------------------------------------------
- | Return all users route = /api/users
+ | get, Return all users route = /api/users
  | -----------------------------------------------------------------------------
  */
 router.get('/', function (req, res, next) {
@@ -38,30 +37,28 @@ router.get('/', function (req, res, next) {
     // })
 
     User.find({})
-        .select(['name'])
+        // .select(['name'])
         .then( (user) => {
             res.send(user);
-        });
+        })
 })
-
 
 
 
 /**
  | -----------------------------------------------------------------------------
- | route = /api/users
+ | post, route = /api/users/signup
  | -----------------------------------------------------------------------------
- | post
  */
-router.post('/', function (req, res, next) {
+router.post('/signup', function (req, res, next) {
 
 
     // store data
     User.create(req.body).then(function(user){
 
-            res.send(user);
+            res.send(user)
 
-        }).catch(next);
+        }).catch(next)
 
 });
 
@@ -69,35 +66,64 @@ router.post('/', function (req, res, next) {
 
 /**
  | -----------------------------------------------------------------------------
- | route = /api/users/:id
+ | post, route = /api/users/check-email-password
  | -----------------------------------------------------------------------------
- | put
+ */
+router.post('/login', function (req, res, next) {
+
+    // res.send(req.body);
+    User.findOne({
+        email: req.body.email,
+    }).then( (user) => {
+
+        user.comparePassword(req.body.password, function(err, isMatch) {
+             if (err) throw err;
+
+             if(isMatch && isMatch == true) {
+                //  req.session.user = user;
+                 res.status(200).send(isMatch);
+             }else {
+                 res.status(401).send(isMatch);
+             }
+
+         });
+
+    });
+
+});
+
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | put, route = /api/users/:id
+ | -----------------------------------------------------------------------------
  */
 router.put('/:id', function (req, res, next) {
 
-    User.findByIdAndUpdate(req.params.id, req.body, {new: false}).then(function(user){
+    User.findByIdAndUpdate(req.params.id, req.body, {new: false}).then( (user) => {
 
             User.findOne({_id: req.params.id}).then(function(user){
-                res.send(user);
-            });
+                res.send(user)
+            })
 
-        });
+        }).catch(next)
 });
 
 
 
 /**
  | -----------------------------------------------------------------------------
- | route = /api/users/:id
+ | delete, route = /api/users/:id
  | -----------------------------------------------------------------------------
- | delete
  */
 router.delete('/:id', function (req, res, next) {
 
-    User.findByIdAndRemove({ _id: req.params.id }).then(function(user){
+    User.findByIdAndRemove({ _id: req.params.id }).then( (user) => {
 
-        res.send(user);
-    })
+        res.send(user)
+
+    }).catch(next)
 
 });
 

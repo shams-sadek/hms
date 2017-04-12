@@ -1,8 +1,15 @@
+$pColor : blue;
+
+$bodyColor: skyblue;
+
+$fontSize: 20px;
+
 body {
-    background-color: skyblue;
+    background-color: $bodyColor;
 
     p {
-        font-size: 16pt;
+        font-size: $fontSize;
         font-weight: bold;
+        color: $pColor;
     }
 }

@@ -14,4 +14,10 @@
 // import TodoComponent from './todoComponent/todoComponent';
 
 
-import Calculation from './calculation/calculation';
+// import Calculation from './calculation/calculation';
+
+import abc,{menus, sadik} from './menus';
+
+console.log(menus)
+console.log(sadik)
+console.log(abc)

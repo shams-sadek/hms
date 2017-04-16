@@ -1,13 +1,26 @@
-/**
- | ---------------------------------------------------------
- | express
- | ---------------------------------------------------------
- */
 const express = require('express');
 const app = express();
 
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+const exphbs  = require('express-handlebars');
 const expressValidator = require('express-validator');
+
+const flash = require('connect-flash');
+
 const expressSession = require('express-session');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+// database
+global.mongoose = require('mongoose');
+const mongo = require('mongodb');
+
+
+
 
 /**
  | ------------------------------
@@ -25,22 +38,65 @@ app.use(cors());
  | middleware body-parser (json & http post)
  | -----------------------------------------------------------------------------
  */
-// set body-parser middleware
-const bodyParser = require('body-parser');
-
 app.use(bodyParser.json());
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-// validator start
-app.use(expressValidator());
+
+
+/**
+ | -------------------------------------------------------------------------------------------------------
+ | express-validator [options], it must be added after bodyParser
+ | In this example, the formParam value is going to get morphed into form body format useful for printing.
+ | -------------------------------------------------------------------------------------------------------
+ */
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+
 
 // session
-app.use(expressSession({ secret: 'Max', saveUninitialized: false, resave: false}));
+app.use(expressSession({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
 
-// middleware for assess public folder
-app.use(express.static('public'));
+
+app.use(flash());
+
+// Global vars
+app.use(function(req, res, next){
+    res.locals.successMsg = req.flash('success_msg');
+    res.locals.errorMsg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+})
+
+
+//passport auth ( by passportjs )
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+// middleware for assess public folder (set static folder)
+app.use(express.static( path.join(__dirname, 'public') ));
 
 
 
@@ -52,8 +108,6 @@ app.use(express.static('public'));
  | mongoose Database Connection String
  | -----------------------------------------------------------------------------
  */
-global.mongoose = require('mongoose');
-
 // mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://127.0.0.1:27017/faiza');
 mongoose.Promise = global.Promise;
@@ -66,7 +120,6 @@ mongoose.Promise = global.Promise;
  | global variables
  | ---------------------------------------------------------
  */
-
 global.globalUrl = 'http://localhost:3000';
 
 
@@ -98,6 +151,12 @@ global.globalUrl = 'http://localhost:3000';
   | error handling middleware V.V.I ( 3rd/Last Part middleware)
   | ----------------------------------------------------------------------------
   */
+  app.use( function(req, res, next){
+
+      console.log("hi I'm Sadik");
+      next()
+  });
+
  app.use(function(err, req, res, next){
     // console.log(err);
 
@@ -117,7 +176,7 @@ global.globalUrl = 'http://localhost:3000';
  | express-handlebars (template engine)
  | ---------------------------------------------------------
  */
-var exphbs  = require('express-handlebars');
+app.set('views', path.join(__dirname, 'views'));
 
 app.engine('.hbs', exphbs({
     extname: '.hbs',
@@ -126,6 +185,8 @@ app.engine('.hbs', exphbs({
 
 app.set('view engine', 'hbs');
 
+
+//access files from directory
 app.use('/assets', express.static('assets'));
 app.use('/dist', express.static('dist'));
 

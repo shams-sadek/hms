@@ -10,6 +10,8 @@ var router = express.Router()
 //  request handler
 var request = require("request")
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
@@ -20,7 +22,7 @@ router.use(function timeLog (req, res, next) {
 
 /**
  | -----------------------------------------------------------------------------
- | Return all users route = /user/list
+ | Return all users route = /users
  | -----------------------------------------------------------------------------
  */
 router.get('/', (req, res, next) => {
@@ -61,10 +63,64 @@ router.get('/', (req, res, next) => {
 
 /**
  | -----------------------------------------------------------------------------
- | get => /users/create
+ | get => /users/login
  | -----------------------------------------------------------------------------
  */
-router.get('/create', (req, res, next) => {
+router.get('/login', (req, res, next) => {
+
+        res.render('user/login');
+
+});
+
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | post => /users/login
+ | -----------------------------------------------------------------------------
+ */
+
+ passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // User.findOne({ username: username }, function (err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) {
+    //     return done(null, false, { message: 'Incorrect username.' });
+    //   }
+    //   if (!user.validPassword(password)) {
+    //     return done(null, false, { message: 'Incorrect password.' });
+    //   }
+    //   return done(null, user);
+    // });
+  }
+));
+
+// router.post('/login', (req, res, next) => {
+//
+//         res.send(req.body);
+//         // res.render('user/login');
+//
+// });
+
+router.post('/login',
+            passport.authenticate('local', {
+                successRedirect: '/',
+                failureRedirect: '/login'
+            }),
+            function(req, res){
+                res.redirect('/');
+            }
+        );
+
+
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | get => /users/register
+ | -----------------------------------------------------------------------------
+ */
+router.get('/register', (req, res, next) => {
 
         res.render('user/userRegistration', { errors: req.session.errors});
 
@@ -80,13 +136,15 @@ router.get('/create', (req, res, next) => {
 router.post('/create', (req, res, next) => {
 
     // check validation
-    req.check('name', 'Name field is required.').notEmpty();
-    req.check('email', 'Email field is required.').notEmpty();
+    req.checkBody('name', 'Name field is required.').notEmpty();
+    req.checkBody('email', 'Email field is required.').notEmpty();
 
     var errors = req.validationErrors();
     if(errors){
-         req.session.errors = {msg: errors[0].msg};
+         req.session.errors = errors;
          res.redirect('/users/create');
+    }else{
+        res.send('success');
     }
 
 

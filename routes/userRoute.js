@@ -82,15 +82,18 @@ router.get('/login', (req, res, next) => {
  | passport js for users/login (post method)
  | -----------------------------------------------------------------------------
  */
- passport.use(new LocalStrategy(
-  function(username, password, done) {
+ passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+  function(email, password, done) {
 
       // check username
-      User.getUserByUserName(username, function(err, user){
+      User.getUserByEmail(email, function(err, user){
            if (err) { return done(err); }
 
            if (!user) {
-             return done(null, false, { message: 'Incorrect username.' });
+             return done(null, false, { message: 'Incorrect email address.' });
            }
 
           //check password

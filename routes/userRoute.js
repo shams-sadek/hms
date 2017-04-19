@@ -6,12 +6,14 @@
 var express = require('express')
 var router = express.Router()
 
+var User = require('../apis/models/user');
 
 //  request handler
 var request = require("request")
 
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
@@ -74,44 +76,92 @@ router.get('/login', (req, res, next) => {
 
 
 
+
+/**
+ | -----------------------------------------------------------------------------
+ | passport js for users/login (post method)
+ | -----------------------------------------------------------------------------
+ */
+ passport.use(new LocalStrategy(
+  function(username, password, done) {
+
+      // check username
+      User.getUserByUserName(username, function(err, user){
+           if (err) { return done(err); }
+
+           if (!user) {
+             return done(null, false, { message: 'Incorrect username.' });
+           }
+
+          //check password
+          User.comparePassword(password, user.password, function(err, isMatch){
+               if (err) { return done(err); }
+              if(isMatch){
+                  return done(null, user);
+              }else {
+                  return done(null, false, {message: "Invalid password"});
+              }
+          });// comparePassword()
+
+      });// getUserByUserName()
+
+  }// function
+));
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+
 /**
  | -----------------------------------------------------------------------------
  | post => /users/login
  | -----------------------------------------------------------------------------
  */
-
- passport.use(new LocalStrategy(
-  function(username, password, done) {
-    // User.findOne({ username: username }, function (err, user) {
-    //   if (err) { return done(err); }
-    //   if (!user) {
-    //     return done(null, false, { message: 'Incorrect username.' });
-    //   }
-    //   if (!user.validPassword(password)) {
-    //     return done(null, false, { message: 'Incorrect password.' });
-    //   }
-    //   return done(null, user);
-    // });
-  }
-));
-
 // router.post('/login', (req, res, next) => {
-//
-//         res.send(req.body);
-//         // res.render('user/login');
-//
-// });
+//     User.find({ name: req.body.username }, (err, data) => {
+//         res.send(data);
+//     })
+//     // res.send('sdfsd');
+// }
 
+        // );
 router.post('/login',
             passport.authenticate('local', {
                 successRedirect: '/',
-                failureRedirect: '/login'
+                failureRedirect: '/users/login',
+                failureFlash: true
             }),
             function(req, res){
-                res.redirect('/');
+
+                // res.redirect('/');
             }
         );
 
+
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | get => /users/logout
+ | -----------------------------------------------------------------------------
+ */
+router.get('/logout', (req, res, next) => {
+
+        req.logout();
+
+        req.flash('success_msg', 'You are logged out.');
+
+        res.redirect('/users/login');
+
+});
 
 
 
@@ -130,50 +180,81 @@ router.get('/register', (req, res, next) => {
 
 /**
  | -----------------------------------------------------------------------------
- | post => /users/create
+ | post => /users/register
  | -----------------------------------------------------------------------------
  */
-router.post('/create', (req, res, next) => {
+router.post('/register', (req, res, next) => {
+
+    // res.status(200).json(req.body);
+    var name = req.body.name;
+    var email = req.body.email;
+    var password = req.body.password;
+    var password2 = req.body.password2;
+
 
     // check validation
-    req.checkBody('name', 'Name field is required.').notEmpty();
-    req.checkBody('email', 'Email field is required.').notEmpty();
+    req.checkBody('name', 'Name is required.').notEmpty();
+    req.checkBody('email', 'Email is required.').notEmpty();
+    req.checkBody('email', 'Email is not valid.').isEmail();
+    req.checkBody('password', 'Password is required.').notEmpty();
+    req.checkBody('password2', 'Password does not match.').equals(req.body.password);
 
     var errors = req.validationErrors();
     if(errors){
-         req.session.errors = errors;
-         res.redirect('/users/create');
-    }else{
-        res.send('success');
+
+        res.render('user/userRegistration', {
+            errors: errors
+        });
+    //      req.session.errors = errors;
+    //      res.redirect('/users/create');
+    }else{ // not errors
+
+        // set api post url to save data
+        var url = globalUrl + '/api/users/signup';
+
+
+        var data = {
+            name: name,
+            email: email,
+            password: password
+        }
+
+        // promise-1
+        var p1 = new Promise( (resolve, reject) => {
+            request.post({url: url, form: data }, (err,httpResponse,body) => {
+
+                         if (err) reject(err);
+
+                         else resolve(body);
+
+                    });
+        });// p1
+
+        // apply promises
+        Promise.all([p1]).then( values => {
+
+            var result = JSON.parse(values[0]);
+
+            if (result.error) {
+                req.flash('error_msg', 'Already Exists This Email. Please Try Again.');
+
+                res.redirect('/users/register');
+
+            } else { // success if passed
+                req.flash('success_msg', 'You are registered. Now you can login.');
+
+                res.redirect('/users/login');
+            }
+
+
+        }).catch( reason => {
+            req.flash('error_msg', 'Err in code. Please Check It.');
+
+            res.redirect('/users/register');
+        })
+
     }
 
-
-    var url = globalUrl + '/api/users';
-
-    // promise-1
-    var p1 = new Promise( (resolve, reject) => {
-        request.post({url: url, form: req.body }, (err,httpResponse,body) => {
-
-                     if (err) reject(err);
-
-                     else resolve(body);
-
-                });
-    });// p1
-
-
-    // apply promises
-    Promise.all([p1]).then( values => {
-
-        res.send(values[0]);
-
-    }).catch( reason => {
-        res.send('hi');
-        // res.send(reason);
-    })
-
-
-    res.redirect('/users');
 });
 
 

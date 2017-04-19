@@ -13,7 +13,7 @@ const flash = require('connect-flash');
 const expressSession = require('express-session');
 
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
 
 // database
 global.mongoose = require('mongoose');
@@ -81,21 +81,34 @@ app.use(expressSession({
 
 app.use(flash());
 
-// Global vars
-app.use(function(req, res, next){
-    res.locals.successMsg = req.flash('success_msg');
-    res.locals.errorMsg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-})
-
-
 //passport auth ( by passportjs )
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-// middleware for assess public folder (set static folder)
+/**
+ | ---------------------------------------------------------
+ | global variables
+ | ---------------------------------------------------------
+ */
+global.globalUrl = 'http://localhost:3000';
+
+// Global vars
+app.use(function(req, res, next){
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
+    next();
+})
+
+
+
+/**
+ | -----------------------------------------------------------------------------
+ | middleware for assess public folder (set static folder)
+ | -----------------------------------------------------------------------------
+ */
 app.use(express.static( path.join(__dirname, 'public') ));
 
 
@@ -115,12 +128,16 @@ mongoose.Promise = global.Promise;
 
 
 
-/**
- | ---------------------------------------------------------
- | global variables
- | ---------------------------------------------------------
- */
-global.globalUrl = 'http://localhost:3000';
+
+
+
+//access files from directory
+app.use('/assets', express.static('assets'));
+app.use('/dist', express.static('dist'));
+
+
+
+
 
 
 
@@ -151,12 +168,6 @@ global.globalUrl = 'http://localhost:3000';
   | error handling middleware V.V.I ( 3rd/Last Part middleware)
   | ----------------------------------------------------------------------------
   */
-  app.use( function(req, res, next){
-
-      console.log("hi I'm Sadik");
-      next()
-  });
-
  app.use(function(err, req, res, next){
     // console.log(err);
 
@@ -186,9 +197,7 @@ app.engine('.hbs', exphbs({
 app.set('view engine', 'hbs');
 
 
-//access files from directory
-app.use('/assets', express.static('assets'));
-app.use('/dist', express.static('dist'));
+
 
 
 

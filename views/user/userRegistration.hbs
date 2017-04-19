@@ -1,21 +1,23 @@
-<div class="container-fluid">
-    <div class="row">
 
-        <div class="">
-                {{# if errors}}
-                    {{#each errors as |value key|}}
-                        <li>{{ value.msg }}</li>
-                    {{/each}}
-                {{/if}}
-        </div>
 
         <div class="col-md-offset-1 col-md-4">
-            <form method="POST" action="/users/create">
+
+            <!-- Display errors -->
+            {{# if errors}}
+
+                {{#each errors}}
+                    <div class="alert alert-danger">{{ msg }}</div>
+                {{/each}}
+
+            {{/if}}
+
+
+            <form method="POST" action="/users/register">
 
                 <!--  user name -->
               <div class="form-group">
                 <label for="name">Name</label>
-                <input type="name" name="name" class="form-control" id="name" placeholder="Name">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Name">
               </div>
 
 
@@ -32,10 +34,12 @@
                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
               </div>
 
+              <!--  password2 -->
+              <div class="form-group">
+                <label for="exampleInputPassword2">Confirm Password</label>
+                <input type="password" name="password2" class="form-control" id="exampleInputPassword2" placeholder="Confirm Password">
+              </div>
+
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
-
-    </div><!-- end class=row -->
-
-</div>

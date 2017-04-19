@@ -1,9 +1,11 @@
-var bcrypt = require('bcrypt');
+// var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
 const someOtherPlaintextPassword = 'not_bacon';
 let SALT_WORK_FACTOR = 10;
 
+
+var bcrypt = require('bcryptjs');
 
 
 // Schema Buildup
@@ -85,4 +87,24 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 
 //exports user collection
-module.exports = mongoose.model('user', UserSchema);
+var User = module.exports = mongoose.model('user', UserSchema);
+
+
+// check username
+module.exports.getUserByUserName = function(username, callback){
+    var query = { name: username};
+    User.findOne(query, callback);
+}
+
+// check id
+module.exports.getUserById = function(id, callback){
+    User.findById(id, callback);
+}
+
+// compare password
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+        if (err) return callback(err);
+        callback(null, isMatch);
+    });
+}

@@ -93,6 +93,7 @@ app.use(passport.session());
  */
 global.globalUrl = 'http://localhost:3000';
 
+
 // Global vars
 app.use(function(req, res, next){
     res.locals.success_msg = req.flash('success_msg');

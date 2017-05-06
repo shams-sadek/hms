@@ -1,2 +1,2 @@
 
-console.log('otherjs');
+// console.log('otherjs');

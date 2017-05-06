@@ -1,0 +1,33 @@
+<a href="/investigation/create" class=""> Create New investigation </a>
+
+<hr />
+
+<!-- Display errors -->
+{{# if errors}}
+
+    {{#each errors}}
+        <div class="alert alert-danger">{{ msg }}</div>
+    {{/each}}
+
+{{/if}}
+
+<table class="table">
+    <tr>
+        <th>Sl</th>
+        <th>Name</th>
+        <th>Option {{ globalUrl }}</th>
+    </tr>
+
+    {{#each lists as |value key|}}
+
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value.name }}</td>
+            <td>
+                <a href="{{ ../globalUrl }}/investigation/edit/{{value._id }}" >Edit</a>
+            </td>
+        </tr>
+
+    {{/each}}
+
+</table>

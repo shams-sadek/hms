@@ -14,14 +14,15 @@ var request = require("request")
 
 // const got = require('got');
 
-var ensureAuthenticated = require('../helpers/ensureAuthenticated');
+// passportjs route middleware
+var auth = require('../helpers/authenticated');
 
 /**
  | -----------------------------------------------------------------------------
  | define the home page route
  | -----------------------------------------------------------------------------
  */
-router.get('/', ensureAuthenticated, function (req, res) {
+router.get('/', auth.login, function (req, res) {
 
     var p1 = new Promise(function(resolve, reject){
 

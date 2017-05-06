@@ -1,24 +1,13 @@
 
 
-var calc = function(a,b, method){
+var myArray = [];
 
-    this.a = a;
-    this.b = b;
-    this.method = method;
+// myArray[0] = "Shams";
+// myArray[1] = "Sadik";
 
-    this.add = function(){
-        return this.a + this.b;
-    }
+// var u = myArray.unshift('world');
+var p = myArray.push('Hello');
 
-    this.multiply = function(){
-        return this.a * this.b;
-    }
+var a = myArray.shift();
 
-    return this[this.method]();
-
-}
-
-
-var result = calc(4,5, 'multiply');
-
-console.log(result);
+console.log(this)

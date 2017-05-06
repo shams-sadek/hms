@@ -5,7 +5,7 @@
  */
 module.exports = function(app){
 
-    
+
     // home page
     app.use('/', require('./home'));
 
@@ -16,6 +16,10 @@ module.exports = function(app){
 
     // user
     app.use('/users', require('./userRoute'));
+
+
+    // investigation
+    app.use('/investigation', require('./investigation'));
 
 
 

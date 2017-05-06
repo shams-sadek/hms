@@ -159,4 +159,4 @@ class Calculation extends Component {
     }
 }
 
-ReactDOM.render(<Calculation />, document.getElementById('calculation'));
+// ReactDOM.render(<Calculation />, document.getElementById('calculation'));

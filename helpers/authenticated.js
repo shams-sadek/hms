@@ -13,5 +13,19 @@ var ensureAuthenticated = function (req, res, next){
     }
 }
 
+var logoutAuthenticated = function (req, res, next){
+    if( req.isAuthenticated()){
 
-module.exports = ensureAuthenticated;
+        req.flash('success_msg', 'You are already logged in.');
+        res.redirect('/');
+
+    }else{
+        return next();
+    }
+}
+
+
+module.exports = {
+    login: ensureAuthenticated,
+    logout: logoutAuthenticated
+};

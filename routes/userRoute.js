@@ -14,6 +14,8 @@ var request = require("request")
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 
+ // passportjs route middleware
+ var auth = require('../helpers/authenticated');
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
@@ -68,7 +70,7 @@ router.get('/', (req, res, next) => {
  | get => /users/login
  | -----------------------------------------------------------------------------
  */
-router.get('/login', (req, res, next) => {
+router.get('/login', auth.logout, (req, res, next) => {
 
         res.render('user/login');
 

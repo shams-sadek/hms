@@ -1,12 +1,9 @@
-function menus () {
-    return [
-        'Purchase',
-        'Sales',
-        'Sales Return',
-        'Purchase Return',
-    ]
-}
+let menus = [
+    'Purchase',
+    'Sales',
+    'Sales Return',
+    'Purchase Return'
+]
 
-class Sadik {
 
-}
+exports = { menus }
